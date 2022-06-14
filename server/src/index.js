@@ -2,7 +2,10 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import router from './src/routes/index.js'
+import fileUpload from 'express-fileupload';
+import path from 'path';
+import router from './routes/index.js'
+import * as url from 'url'
 
 
 mongoose.connect(
@@ -12,9 +15,15 @@ mongoose.connect(
 const PORT = process.env.PORT || 6000; 
 
 const app = express();
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/static', express.static(path.join(__dirname, 'upload')))
+app.use(fileUpload())
+
+
 app.use('/api', router)
 
 const start = () => {
@@ -22,3 +31,20 @@ const start = () => {
 }
 
 start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

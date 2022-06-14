@@ -8,5 +8,9 @@ const router = new Router();
 const controller = new LotController();
 
 router.post('/',checkAuth, createLotValidations, controller.create);
+router.get('/', controller.getAll);
+router.get('/:id', controller.getOne);
+router.delete('/:id',checkAuth, controller.remove);
+router.patch('/:id',controller.update)
 
 export default router;
