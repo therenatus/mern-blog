@@ -16,14 +16,15 @@ const PORT = process.env.PORT || 6000;
 
 const app = express();
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+// const corsOptions = {
+//     origin: 'http://localhost:3000',
+//     optionsSuccessStatus: 200,
+//   }
 
-app.use(cors());
 app.use(express.json());
-
+app.use(cors());
 app.use('/static', express.static(path.join(__dirname, 'upload')))
 app.use(fileUpload())
-
-
 app.use('/api', router)
 
 const start = () => {

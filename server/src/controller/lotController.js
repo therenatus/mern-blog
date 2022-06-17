@@ -9,6 +9,7 @@ class LotController {
     async create (req, res,) {
         try {
             const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+            const now = Date.now();
             const errors =  validationResult(req);
             const { name, endDate, category, method, viewCount, count } = req.body;
             
@@ -19,7 +20,7 @@ class LotController {
             if(!errors.isEmpty()) {
                 return res.status(400).json(errors.array());
             }
-            const lot = new LotModel({name, endDate, category, doc: fileName, method, viewCount, count, author: req.userId});
+            const lot = new LotModel({name, endDate, category, doc: fileName, method, viewCount, count, author: req.userId, date: now});
             const doc = await lot.save();
             res.json(doc);
         } catch (error) {

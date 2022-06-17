@@ -11,5 +11,6 @@ const controller = new UserController();
 router.post('/registration', registerValidations, controller.registration);
 router.post('/login', loginValidators, controller.login);
 router.get('/me', checkAuth, controller.getMe);
+router.get('/', controller.getAll )
 
 export default router

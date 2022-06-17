@@ -22,17 +22,19 @@ class UserController {
         try {
             const errors =  validationResult(req);
             const { name, lastName, company, number, website, email, innCode, pinCode, password, role } = req.body;
-            const hasUser = await User.findOne({where: {email}});
+            console.log(req.body)
+            const hasUser = await User.findOne({email});
+            console.log(hasUser)
             if(!errors.isEmpty()) {
                 return res.status(400).json(errors.array());
             }
             if (hasUser) {
-                return next(ApiError.badRequest('Пользователь с таким email уже существует'))
+                return res.status(400).json({message:'Пользователь с таким email уже существует'})
             }
             const hashPassword = await bcrypt.hash(password, 7);
             const profile = new User({name, lastName, company, number, website, email,  innCode, pinCode, role,password: hashPassword})
             const user = await profile.save();
-            const token = generateJwt(user._id, user.email, user.role);
+            const token = generateJwt(user._id, user.email, user.roles);
     
             res.json({user, token})
         }catch(err) {
@@ -44,22 +46,23 @@ class UserController {
 
     async login(req, res) {
         try {
-            const errors =  validationResult(req);
+            // const errors =  validationResult(req);
+            console.log(req.body)
             const { email, password } = req.body;
             const user = await User.findOne({email});
-            if(!errors.isEmpty()) {
-                return res.status(400).json(errors.array());
-            }
+            // if(!errors.isEmpty()) {
+            //     return res.status(400).json(errors.array());
+            // }
             if (!user) {
                 return res.status(404).json({message:'Пользователь не найден'})
             }
 
             const validPassword = await bcrypt.compare(password, user.password);
             if (!validPassword) {
-                return res.status(400).json({message:'еверный пароль'})
+                return res.status(403).json({message:'Hеверный пароль'})
             }
 
-            const token = generateJwt(user.id, user.email, user.role)
+            const token = generateJwt(user.id, user.email, user.roles)
             res.json({user, token})
         } catch (error) {
             console.log(error)
@@ -84,6 +87,15 @@ class UserController {
               message: 'Нет доступа',
             });
           }
+    }
+
+    async getAll(req, res) {
+        try {
+            const users = await User.find();
+            res.json(users);
+        } catch (error) {
+            return res.status(404).json({ error: error });
+        }
     }
 
 }
