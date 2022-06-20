@@ -14,9 +14,9 @@ class LotController {
             const { name, endDate, category, method, viewCount, count } = req.body;
             
             const { docs } = req.files;
+            console.log(docs);
             let fileName = uuidv4()+'.pdf';
             docs.mv(path.resolve( __dirname, '..', 'upload', fileName));
-            console.log(docs.name)
             if(!errors.isEmpty()) {
                 return res.status(400).json(errors.array());
             }

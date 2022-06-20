@@ -21,7 +21,7 @@ class UserController {
     async registration(req, res){
         try {
             const errors =  validationResult(req);
-            const { name, lastName, company, number, website, email, innCode, pinCode, password, role } = req.body;
+            const { name, lastName, company, number, website, email, innCode, pinCode, password, roles } = req.body;
             console.log(req.body)
             const hasUser = await User.findOne({email});
             console.log(hasUser)
@@ -32,7 +32,7 @@ class UserController {
                 return res.status(400).json({message:'Пользователь с таким email уже существует'})
             }
             const hashPassword = await bcrypt.hash(password, 7);
-            const profile = new User({name, lastName, company, number, website, email,  innCode, pinCode, role,password: hashPassword})
+            const profile = new User({name, lastName, company, number, website, email,  innCode, pinCode, roles,password: hashPassword})
             const user = await profile.save();
             const token = generateJwt(user._id, user.email, user.roles);
     
@@ -42,7 +42,6 @@ class UserController {
             res.status(500).send({message:'registration error'})
         }
     }
-
 
     async login(req, res) {
         try {

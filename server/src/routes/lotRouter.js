@@ -9,8 +9,8 @@ const router = new Router();
 const controller = new LotController();
 
 router.post('/',checkAuth, roleMiddleware(["ADMIN", "EDITOR"]), createLotValidations, controller.create);
-router.get('/',roleMiddleware(["ADMIN", "EDITOR", "USER"]), controller.getAll);
-router.get('/:id' ,roleMiddleware(["ADMIN", "EDITOR", "USER"]), controller.getOne);
+router.get('/', controller.getAll);
+router.get('/:id' , controller.getOne);
 router.delete('/:id',checkAuth, roleMiddleware(["ADMIN", "EDITOR"]), controller.remove);
 router.patch('/:id', roleMiddleware(["ADMIN", "EDITOR"]),controller.update)
 
