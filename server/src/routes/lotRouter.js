@@ -8,10 +8,10 @@ import { createLotValidations } from '../validation/lot.js';
 const router = new Router();
 const controller = new LotController();
 
-router.post('/',checkAuth, roleMiddleware(["ADMIN", "EDITOR"]), createLotValidations, controller.create);
+router.post('/',checkAuth, roleMiddleware(["ADMIN", "MODERATOR"]), createLotValidations, controller.create);
 router.get('/', controller.getAll);
 router.get('/:id' , controller.getOne);
-router.delete('/:id',checkAuth, roleMiddleware(["ADMIN", "EDITOR"]), controller.remove);
-router.patch('/:id', roleMiddleware(["ADMIN", "EDITOR"]),controller.update)
+router.delete('/:id',checkAuth, roleMiddleware(["ADMIN"]), controller.remove);
+router.patch('/:id', roleMiddleware(["ADMIN"]),controller.update)
 
 export default router;

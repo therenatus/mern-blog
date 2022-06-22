@@ -5,7 +5,6 @@ export default ( req, res, next ) => {
         try {
             const decode  = jwt. verify(token, process.env.JWT_SECRET);
             req.userId = decode.id;
-            req.userEmail = decode.email;
             req.userRole = decode.role;
         } catch (error) {
             return res.status(403).json({message:'Forbidden'});

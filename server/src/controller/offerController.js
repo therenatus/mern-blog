@@ -13,9 +13,9 @@ class OfferController {
             console.log(file)
             let fileName = uuidv4()+'.pdf';
             file.mv(path.resolve( __dirname, '..', 'upload', fileName));
-            const model =  await new OfferModel({ userId, lotId, docs: fileName });
+            const model = await new OfferModel({ userId, lotId, docs: fileName });
             console.log(model)
-            const offer =await model.save();
+            const offer = await model.save();
             console.log(offer);
             res.json(offer);
         } catch (error) {

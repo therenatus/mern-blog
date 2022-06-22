@@ -3,12 +3,14 @@ import { Router} from 'express';
 import { registerValidations, loginValidators } from '../validation/auth.js';
 import { UserController } from '../controller/userController.js';
 import checkAuth from '../middleware/checkAuth.js';
+import roleMiddleware from '../middleware/roleMiddleware.js';
 
 const router = new Router();
 const controller = new UserController();
 
 
 router.post('/registration', registerValidations, controller.registration);
+router.post('admin', roleMiddleware(["ADMIN"]), registerValidations, controller.createModerator);
 router.post('/login', loginValidators, controller.login);
 router.get('/me', checkAuth, controller.getMe);
 router.get('/', controller.getAll )
