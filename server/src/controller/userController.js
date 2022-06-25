@@ -96,9 +96,8 @@ class UserController {
             if (!validPassword) {
                 return res.status(403).json({message:'Hеверный пароль'})
             }
-            const token = generateJwt(user.id, user.email, user.roles);
-            const {password, ...userData} = user._doc;
-            res.json({userData, token})
+            const token = generateJwt(user._id, user.roles);
+            res.json({user, token})
         } catch (error) {
             console.log(error)
             res.status(500).send({message:'auth error'})
@@ -115,7 +114,7 @@ class UserController {
               });
             }
         
-            res.json(user);
+            res.json({user});
           } catch (err) {
             console.log(err);
             res.status(403).json({
