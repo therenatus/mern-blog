@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const LotSchema = new mongoose.Schema({
     name: {type: String, required: true},
+    lastName: {type: String, required: true},
     endDate: {type: Date, required: true},
     doc:  {type : String},
     category: {type: String, required: true},
