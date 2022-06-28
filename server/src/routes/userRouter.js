@@ -14,5 +14,7 @@ router.post('admin', roleMiddleware(["ADMIN"]), registerValidations, controller.
 router.post('/login', loginValidators, controller.login);
 router.get('/me', checkAuth, controller.getMe);
 router.get('/', controller.getAll )
+router.get('/companies', controller.getAllUsers )
+router.get('/moderators', controller.getAllModerators )
 
 export default router

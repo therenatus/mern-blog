@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 
 const LotSchema = new mongoose.Schema({
     name: {type: String, required: true},
-    lastName: {type: String, required: true},
     endDate: {type: Date, required: true},
-    doc:  {type : String},
+    doc:  [{type : String}],
     category: {type: String, required: true},
     method: {type: String, required: true},
     viewCount: {type: Number, default: 0},

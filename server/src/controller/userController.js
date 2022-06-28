@@ -42,7 +42,7 @@ class UserController {
                 email: req.body.email, 
                 company: req.body.company, 
                 webSite: req.body.webSite, 
-                roles: req.body.role });
+                roles: req.body.roles });
             const user = await profile.save();
             const token = await generateJwt(user._id, user._roles);
             console.log(token);
@@ -108,7 +108,6 @@ class UserController {
 
     async getMe(req, res) {
         try {
-            console.log(req)
             const user = await User.findById(req.userId);
             
             if (!user) {
@@ -131,6 +130,32 @@ class UserController {
             const users = await User.find().select('-password');
             res.json(users);
         } catch (error) {
+            return res.status(404).json({ error: error });
+        }
+    }
+
+    async getAllUsers(req, res) {
+        try {
+            const users = await User.find().select('-password');
+            const company = users.filter( user => {
+                if(user.roles.includes("USER")) return user
+            })
+            res.json({company})
+        } catch (error) {
+            console.log(error)
+            return res.status(404).json({ error: error });
+        }
+    }
+
+    async getAllModerators(req, res) {
+        try {
+            const users = await User.find().select('-password');
+            const moderator = users.filter( user => {
+                if(user.roles.includes("MODERATOR")) return user
+            })
+            res.json({moderator})
+        } catch (error) {
+            console.log(error)
             return res.status(404).json({ error: error });
         }
     }

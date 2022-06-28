@@ -7,7 +7,7 @@ export default (roles) => {
             if (!token) {
                 return res.status(403).json({message: "Пользователь не авторизован"})
             }
-            const {role: userRoles} = jwt.verify(token, process.env.JWT_SECRET)
+            const {roles: userRoles} = jwt.verify(token, process.env.JWT_SECRET)
             let hasRole = false
             userRoles.forEach(role => {
                 if (roles.includes(role)) {
