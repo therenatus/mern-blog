@@ -1,12 +1,11 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt"
 import dotenv from 'dotenv';
-dotenv.config();
 
 import { validationResult } from 'express-validator';
 import  User  from "../models/userModel.js";
-import ApiError from "../../error/ApiError.js";
 
+dotenv.config();
 
 const generateJwt = (id, role) => {
     return jwt.sign(

@@ -12,9 +12,7 @@ class OfferController {
             let fileName = uuidv4()+'.pdf';
             file.mv(path.resolve( __dirname, '..', 'upload', fileName));
             const model = await new OfferModel({ userId, lotId, docs: fileName });
-            console.log(model)
             const offer = await model.save();
-            console.log(offer);
             res.json(offer);
         } catch (error) {
             console.log(error);
@@ -27,7 +25,9 @@ class OfferController {
     }
 
     async getLotsOffers(req, res) {
-        const data = await OfferModel.find({lotId: req.body.lotId});
+        console.log(req)
+        const lotId = req.params.id;
+        const data = await OfferModel.find({lotId});
         res.json(data);
     }
 }

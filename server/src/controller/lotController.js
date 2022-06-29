@@ -11,23 +11,15 @@ class LotController {
             const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
             const now = Date.now();
             const errors =  validationResult(req);
-            const { name, endDate, category, method, viewCount, count } = req.body;
-            console.log(req)
-            const { docs } = req.files;
-            console.log("docs :", docs);
-            let a = [];
-            docs.map(doc => {
-                let fileName = uuidv4()+'.pdf';
-                doc.mv(path.resolve( __dirname, '..', 'upload', doc.name));
-                a.push(doc.name)
-            })
-            console.log(a)
-            // docs.mv(path.resolve( __dirname, '..', 'upload', fileName));
+            const { name, endDate, category, method } = req.body;
+            const { docs } = req.files
+            let fileName = uuidv4()+'.pdf';
+            docs.mv(path.resolve( __dirname, '..', 'upload', fileName));
             if(!errors.isEmpty()) {
                 console.log(errors)
                 return res.status(400).json(errors.array());
             }
-            const lot = new LotModel({name, endDate, category, doc: a, method, viewCount, count, author: req.userId, date: now});
+            const lot = new LotModel({name, endDate, category, doc: fileName, method, author: req.userId, date: now});
             const doc = await lot.save();
             res.json(doc);
         } catch (error) {
@@ -38,7 +30,7 @@ class LotController {
 
     async getAll(req, res) {
         try {
-            const lots = await LotModel.find().populate('author').exec();
+            const lots = await LotModel.find().sort({'date': -1}).populate('author').exec();
             res.json(lots);
         } catch (error) {
             console.log(error)

@@ -8,7 +8,8 @@ const LotSchema = new mongoose.Schema({
     method: {type: String, required: true},
     viewCount: {type: Number, default: 0},
     author: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    date: {type: Date}
+    date: {type: Date},
+    isOpen: {type: Boolean, required: true, default: false},
 })
 
 export default mongoose.model('Lot', LotSchema);

@@ -10,8 +10,8 @@ const controller = new OfferController();
 
 
 router.post('/',checkAuth, roleMiddleware(["ADMIN", "USER"]), controller.sendOffer);
+router.get('/:id',checkAuth, roleMiddleware(["ADMIN", "MODERATOR"]), controller.getLotsOffers);
 router.get('/me', checkAuth, controller.getAuthorOffer);
-router.get('/lots', roleMiddleware(["ADMIN", "MODERATOR"]), controller.getLotsOffers);
 // router.get('/all', controller.getAll )
 
 export default router
