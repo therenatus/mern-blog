@@ -11,6 +11,7 @@ const controller = new LotController();
 router.post('/',checkAuth, roleMiddleware(["ADMIN", "MODERATOR"]), createLotValidations, controller.create);
 router.get('/', controller.getAll);
 router.get('/:id' , controller.getOne);
+router.get('/view/:id' , controller.changeView);
 router.delete('/:id',checkAuth, roleMiddleware(["ADMIN"]), controller.remove);
 router.patch('/:id', roleMiddleware(["ADMIN"]),controller.update)
 

@@ -70,6 +70,38 @@ class LotController {
         }
     }
 
+    async changeView(req, res) {
+        try {
+            const lotId = req.params.id;
+            LotModel.findByIdAndUpdate(
+                {
+                    _id: lotId,
+                },
+                {
+                    $set: { isOpen: true}
+                },
+                {
+                    returnDocument: 'after'
+                },
+                (err, doc) => {
+                    if(err){
+                        console.log(err)
+                        return res.status(500).json({message:'Error'});
+                    }
+
+                    if(!doc){
+                        return res.status(404).json({message:'Not found'});
+                    }
+
+                    res.json(doc);
+                }
+            ).populate('author')
+        } catch (error) {
+            console.log(error)
+            return res.status(404).json({message:'Not found'});
+        }
+    }
+
     async remove(req, res) {
         try {
             

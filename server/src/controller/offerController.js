@@ -25,9 +25,8 @@ class OfferController {
     }
 
     async getLotsOffers(req, res) {
-        console.log(req)
-        const lotId = req.params.id;
-        const data = await OfferModel.find({lotId});
+        const data = await OfferModel.find({ lotId: req.params.id}).populate('lotId').exec();;
+        console.log(data)
         res.json(data);
     }
 }
