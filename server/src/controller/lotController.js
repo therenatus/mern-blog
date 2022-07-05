@@ -56,11 +56,9 @@ class LotController {
                         console.log(err)
                         return res.status(500).json({message:'Error'});
                     }
-
                     if(!doc){
                         return res.status(404).json({message:'Not found'});
                     }
-
                     res.json(doc);
                 }
             ).populate('author')

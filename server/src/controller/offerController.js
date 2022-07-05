@@ -8,7 +8,7 @@ class OfferController {
         try {
             const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
             const { userId, lotId } = req.body;
-            const {file} = req.files
+            const { file } = req.files
             let fileName = uuidv4()+'.pdf';
             file.mv(path.resolve( __dirname, '..', 'upload', fileName));
             const model = await new OfferModel({ userId, lotId, docs: fileName });
@@ -26,7 +26,6 @@ class OfferController {
 
     async getLotsOffers(req, res) {
         const data = await OfferModel.find({ lotId: req.params.id}).populate('lotId').exec();;
-        console.log(data)
         res.json(data);
     }
 }
