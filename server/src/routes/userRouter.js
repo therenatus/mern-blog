@@ -10,7 +10,7 @@ const controller = new UserController();
 
 
 router.post('/registration', registerValidations, controller.registration);
-router.post('admin', roleMiddleware(["ADMIN"]), registerValidations, controller.createModerator);
+router.post('/admin', roleMiddleware(["ADMIN"]), controller.createModerator);
 router.post('/login', loginValidators, controller.login);
 router.get('/me', checkAuth, controller.getMe);
 router.get('/', controller.getAll )

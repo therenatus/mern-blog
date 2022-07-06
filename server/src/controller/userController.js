@@ -23,7 +23,8 @@ class UserController {
 
     async createModerator(req, res) {
         try {
-            const hasUser = await User.find({ email: req.body.email });
+            const errors =  validationResult(req);
+            const hasUser = await User.findOne({ email: req.body.email });
             if(!errors.isEmpty()) {
                 return res.status(400).json(errors.array());
             }
@@ -43,12 +44,12 @@ class UserController {
                 webSite: req.body.webSite, 
                 roles: req.body.roles });
             const user = await profile.save();
-            const token = await generateJwt(user._id, user._roles);
-            console.log(token);
+            console.log(user)
+            const token = generateJwt(user._id, user.roles);
             const {password, ...userData} = user._doc;
             res.json({userData, token}); 
         } catch (error) {
-            
+            console.log(error)
         }
     }
 
