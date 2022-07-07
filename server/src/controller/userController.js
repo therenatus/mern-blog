@@ -138,7 +138,8 @@ class UserController {
         try {
             const users = await User.find().select('-password');
             const company = users.filter( user => {
-                if(user.roles.includes("USER")) return user
+                if(user.roles.includes("USER"));
+                return user
             })
             res.json({company})
         } catch (error) {
