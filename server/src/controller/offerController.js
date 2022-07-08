@@ -20,12 +20,12 @@ class OfferController {
         }
     }
     async getAuthorOffer(req, res) {
-        const data = await OfferModel.find({userId: req.userId}).populate('lotId').exec();
+        const data = await OfferModel.find({userId: req.userId}).populate('lotId userId').exec();
         res.json(data);
     }
 
     async getLotsOffers(req, res) {
-        const data = await OfferModel.find({ lotId: req.params.id}).populate('lotId').exec();;
+        const data = await OfferModel.find({ lotId: req.params.id}).populate('lotId userId').exec();;
         res.json(data);
     }
 }
