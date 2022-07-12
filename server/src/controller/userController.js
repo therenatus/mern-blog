@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt"
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import { ObjectId } from "bson"
 
 import { validationResult } from 'express-validator';
 import  User  from "../models/userModel.js";
@@ -109,20 +111,36 @@ class UserController {
     async getMe(req, res) {
         try {
             const user = await User.findById(req.userId);
-            
+            console.log(user)
             if (!user) {
               return res.status(403).json({
                 message: 'Пользователь не найден',
               });
             }
-            console.log(user)
             res.json({user});
           } catch (err) {
-            console.log(err);
             res.status(403).json({
               message: 'Нет доступа',
             });
           }
+    }
+
+    async getOne(req, res) {
+        try {
+            const id = mongoose.Types.ObjectId(req.params.id);
+            const user = await User.findById(req.params.id)
+            if (!user) {
+                return res.status(404).json({
+                message: 'Пользователь не найден',
+                });
+            }
+            res.json({user});
+            } catch (err) {
+                console.log(err)
+                res.status(403).json({
+                message: 'Нет доступа',
+            });
+        }
     }
 
     async getAll(req, res) {
@@ -138,7 +156,7 @@ class UserController {
         try {
             const users = await User.find().select('-password');
             const company = users.filter( user => {
-                if(user.roles.includes("USER"));
+                if(user.roles.includes("USER"))
                 return user
             })
             res.json({company})
