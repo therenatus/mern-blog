@@ -30,7 +30,20 @@ class LotController {
 
     async getAll(req, res) {
         try {
-            const lots = await LotModel.find().sort({'date': -1}).populate('author').exec();
+            const { page = 1, limit = 2, sort = 'desc' } = req.query;
+            let sortBy;
+            if(sort === 'desc'){
+                sortBy = -1;
+            }
+            if(sort === 'asc'){
+                sortBy = 1;
+            }
+            const lots = await LotModel.find()
+                .limit(limit *1)
+                .skip((page-1)*limit)
+                .sort({'date': sortBy})
+                .populate('author')
+                .exec();
             res.json(lots);
         } catch (error) {
             console.log(error)
