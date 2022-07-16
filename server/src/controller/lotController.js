@@ -30,7 +30,7 @@ class LotController {
 
     async getAll(req, res) {
         try {
-            const { page = 1, limit = 2, sort = 'desc' } = req.query;
+            const { page = 1, limit = 3, sort = 'desc' } = req.query;
             let sortBy;
             if(sort === 'desc'){
                 sortBy = -1;
