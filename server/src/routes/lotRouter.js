@@ -13,6 +13,7 @@ router.get('/', controller.getAll);
 router.get('/:id' , controller.getOne);
 router.get('/view/:id' , controller.changeView);
 router.delete('/:id',checkAuth, roleMiddleware(["ADMIN"]), controller.remove);
-router.patch('/:id', roleMiddleware(["ADMIN"]),controller.update)
+router.patch('/:id', roleMiddleware(["ADMIN"]),controller.update);
+router.get('/search/:key', controller.search);
 
 export default router;

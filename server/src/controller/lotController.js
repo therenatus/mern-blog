@@ -30,7 +30,7 @@ class LotController {
 
     async getAll(req, res) {
         try {
-            const { page = 1, limit = 3, sort = 'desc' } = req.query;
+            const { page = 1, limit = 10, sort = 'desc' } = req.query;
             let sortBy;
             if(sort === 'desc'){
                 sortBy = -1;
@@ -38,13 +38,16 @@ class LotController {
             if(sort === 'asc'){
                 sortBy = 1;
             }
+            const totalCount = await LotModel.countDocuments()
+                .sort({'date': sortBy})
+                .exec();
             const lots = await LotModel.find()
                 .limit(limit *1)
                 .skip((page-1)*limit)
                 .sort({'date': sortBy})
                 .populate('author')
                 .exec();
-            res.json(lots);
+            res.json({lots, totalCount});
         } catch (error) {
             console.log(error)
             return res.status(404).json({message:'Not found'});
@@ -167,6 +170,44 @@ class LotController {
                 res.status(500).json({
                 message: 'Не удалось получить статьи',
                 })
+        }
+    }
+
+    async search(req, res) {
+        try {
+            const { page = 1, limit = 10, sort = 'desc', key } = req.query;
+            console.log('searchhhhhhhhhhhhhhhhhhhhhhh', key)
+            let sortBy;
+            if(sort === 'desc'){
+                sortBy = -1;
+            }
+            if(sort === 'asc'){
+                sortBy = 1;
+            }
+            const totalCount = await LotModel.countDocuments({
+                "$or": [
+                    { name: {$regex: key}},
+                    // { description: {$regex: req.query.key}}
+                    
+                ]
+            }).sort({'date': sortBy})
+                .exec();
+            const lots = await LotModel.find({
+                "$or": [
+                    { name: {$regex: key}},
+                    // { description: {$regex: req.query.key}}
+                    
+                ]
+            }).limit(limit *1)
+                .skip((page-1)*limit)
+                .sort({'date': sortBy})
+                .populate('author')
+                .exec();
+
+            res.json({lots, totalCount});
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json({message:'Not found'});
         }
     }
 }
