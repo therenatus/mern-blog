@@ -30,7 +30,11 @@ class LotController {
 
     async getAll(req, res) {
         try {
-            const { page = 1, limit = 10, sort = 'desc' } = req.query;
+            const { page = 1, limit = 10, sort = 'desc'} = req.query;
+            let filter = {};
+            if(req.query.category){
+                filter = { category: req.query.category}
+            }
             let sortBy;
             if(sort === 'desc'){
                 sortBy = -1;
@@ -41,7 +45,7 @@ class LotController {
             const totalCount = await LotModel.countDocuments()
                 .sort({'date': sortBy})
                 .exec();
-            const lots = await LotModel.find()
+            const lots = await LotModel.find(filter)
                 .limit(limit *1)
                 .skip((page-1)*limit)
                 .sort({'date': sortBy})
