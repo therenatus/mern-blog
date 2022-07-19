@@ -30,19 +30,20 @@ class LotController {
 
     async getAll(req, res) {
         try {
-            const { page = 1, limit = 10, sort = 'desc'} = req.query;
+            const { page = 1, limit = 10, sort = 'desc', category} = req.query;
+            console.log(page)
             let filter = {};
-            if(req.query.category){
-                filter = { category: req.query.category}
-            }
             let sortBy;
+            if(category){
+                filter = { category: category}
+            }
             if(sort === 'desc'){
                 sortBy = -1;
             }
             if(sort === 'asc'){
                 sortBy = 1;
             }
-            const totalCount = await LotModel.countDocuments()
+            const totalCount = await LotModel.countDocuments(filter)
                 .sort({'date': sortBy})
                 .exec();
             const lots = await LotModel.find(filter)
@@ -51,7 +52,7 @@ class LotController {
                 .sort({'date': sortBy})
                 .populate('author')
                 .exec();
-            res.json({lots, totalCount});
+            res.json({lots, pagination: { totalCount, offset: page - 1, count: limit}});
         } catch (error) {
             console.log(error)
             return res.status(404).json({message:'Not found'});
@@ -180,7 +181,6 @@ class LotController {
     async search(req, res) {
         try {
             const { page = 1, limit = 10, sort = 'desc', key } = req.query;
-            console.log('searchhhhhhhhhhhhhhhhhhhhhhh', key)
             let sortBy;
             if(sort === 'desc'){
                 sortBy = -1;
@@ -208,7 +208,7 @@ class LotController {
                 .populate('author')
                 .exec();
 
-            res.json({lots, totalCount});
+            res.json({lots, pagination: { totalCount, offset: page - 1, count: limit}});
         } catch (error) {
             console.log(error)
             return res.status(400).json({message:'Not found'});
